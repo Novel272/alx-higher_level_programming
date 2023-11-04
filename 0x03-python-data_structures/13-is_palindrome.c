@@ -2,6 +2,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+ * add_nodeint - adds a new node at the beginning of a listint_t list
+ * @head: head listint_t
+ * @n: int add in listint_t list
+ * Description:a linked list add elements function
+ * Return: address of new element, or NULL in case it failed
+*/
+
 listint_t *add_nodeint(listint_t **head, const int n)
 {
 	listint_t *new;
@@ -14,6 +22,13 @@ listint_t *add_nodeint(listint_t **head, const int n)
 	*head = new;
 	return (new);
 }
+/**
+ * is_palindrome - identify if single linked list is palindrome or not
+ * @head: head listint_t
+ * Description:a function to identify palindrom
+ * Return: 1 if it is palindrome else 0
+ */
+
 int is_palindrome(listint_t **head)
 {
 	listint_t *head2 = *head;
