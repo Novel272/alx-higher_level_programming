@@ -36,4 +36,3 @@ class Square:
             print("")
         if sel.__size == 0:
             print("")
-

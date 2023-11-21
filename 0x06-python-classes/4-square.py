@@ -28,4 +28,3 @@ class Square:
     def area(sel):
         """Return the current area of the square."""
         return (sel.__size * sel.__size)
-
