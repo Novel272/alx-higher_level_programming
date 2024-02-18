@@ -1,6 +1,7 @@
 #!/usr/bin/python3
-"""list states with a name starting with N
-(N) from the database hbtn_0e_0_usa"""
+"""take an argument and display all values
+in states table of hbtn_0e_0_usa
+where name matche the argument"""
 
 if __name__ == '__main__':
 
@@ -11,8 +12,8 @@ if __name__ == '__main__':
                          user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
 
     cur = db.cursor()
-    cur.execute("""SELECT * FROM states WHERE name
-                LIKE BINARY 'N%' ORDER BY states.id ASC""")
+    cur.execute("SELECT * FROM states WHERE name LIKE BINARY '{}'\
+                ORDER BY states.id ASC".format(sys.argv[4]))
     rows = cur.fetchall()
     for row in rows:
         print(row)

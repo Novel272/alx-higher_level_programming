@@ -1,6 +1,5 @@
 #!/usr/bin/python3
-"""list states with a name starting with N
-(N) from the database hbtn_0e_0_usa"""
+"""list all citie from database hbtn_0e_4_usa"""
 
 if __name__ == '__main__':
 
@@ -11,8 +10,10 @@ if __name__ == '__main__':
                          user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
 
     cur = db.cursor()
-    cur.execute("""SELECT * FROM states WHERE name
-                LIKE BINARY 'N%' ORDER BY states.id ASC""")
+    cur.execute("SELECT cities.id, cities.name, states.name\
+                FROM cities LEFT JOIN states\
+                ON states.id = cities.state_id\
+                ORDER BY cities.id ASC")
     rows = cur.fetchall()
     for row in rows:
         print(row)
