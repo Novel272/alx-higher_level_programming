@@ -1,25 +1,24 @@
 #!/usr/bin/python3
-"""print all City objects
-from database hbtn_0e_14_usa"""
+""" This script print all of City objects from database
+"""
+
+from model_state import Base, State
+from model_city import City
+from sys import argv as av
+from sqlalchemy import (create_engine)
+from sqlalchemy.orm import sessionmaker
 
 if __name__ == "__main__":
+    engine_info = 'mysql+mysqldb://{}:{}@localhost:{}/{}'.format(
+                   av[1], av[2], 3306, av[3])
+    engine = create_engine(engine_info, pool_pre_ping=True)
 
-    import sys
-    from model_state import Base, State
-    from model_city import City
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import Session
-    from sqlalchemy.schema import Table
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                           .format(sys.argv[1], sys.argv[2],
-                                   sys.argv[3]), pool_pre_ping=True)
-    Base.metadata.create_all(engine)
+    result = session.query(State.name, City.id, City.name)\
+        .join(State).where(City.state_id == State.id).order_by(City.id)
+    result_1 = result.all()
 
-    session = Session(engine)
-    for state, city in session.query(State, City)\
-                              .filter(City.state_id == State.id)\
-                              .order_by(City.id).all():
-            print("{}: ({}) {}".format(state.name, city.id, city.name))
-    session.close()
-
+    for st_name, ct_id, ct_name in result:
+        print(f"{st_name}: ({ct_id}) {ct_name}")

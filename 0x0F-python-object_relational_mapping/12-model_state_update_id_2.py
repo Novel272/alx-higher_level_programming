@@ -1,23 +1,23 @@
 #!/usr/bin/python3
-"""change name of State object from
-database hbtn_0e_6_usa"""
+""" script change name of State object from database
+"""
+from model_state import Base, State
+from sys import argv as av
+from sqlalchemy import (create_engine)
+from sqlalchemy import select
+from sqlalchemy.orm import sessionmaker
+
 
 if __name__ == "__main__":
+    engine_info = 'mysql+mysqldb://{}:{}@localhost:{}/{}'\
+        .format(av[1], av[2], 3306, av[3])
 
-    import sys
-    from model_state import Base, State
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import Session
-    from sqlalchemy.schema import Table
+    engine = create_engine(engine_info, pool_pre_ping=True)
 
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                           .format(sys.argv[1], sys.argv[2],
-                                   sys.argv[3]), pool_pre_ping=True)
-    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-    session = Session(engine)
-    state = session.query(State).filter(State.id == 2).first()
-    state.name = 'New Mexico'
+    st = select(State).where(State.id == 2)
+    state_1 = session.scalars(st).one()
+    state_1.name = 'New Mexico'
     session.commit()
-    session.close()
-

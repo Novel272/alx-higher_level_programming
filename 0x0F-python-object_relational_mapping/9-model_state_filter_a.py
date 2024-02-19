@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-"""list State objects that contain
-letter a from database hbtn_0e_6_usa"""
+"""prints first object in a database
+"""
 from model_state import Base, State
 from sys import argv as av
 from sqlalchemy import (create_engine)

@@ -1,24 +1,26 @@
 #!/usr/bin/python3
-"""add State object “Louisiana”
-to database hbtn_0e_6_usa"""
+""" script print state id of given state 'name'
+"""
+from model_state import Base, State
+from sys import argv as av
+from sqlalchemy import (create_engine)
+from sqlalchemy import func
+from sqlalchemy.orm import sessionmaker
+
 
 if __name__ == "__main__":
+    engine_info = 'mysql+mysqldb://{}:{}@localhost:{}/{}'\
+            .format(av[1], av[2], 3306, av[3])
+    engine = create_engine(engine_info, pool_pre_ping=True)
 
-    import sys
-    from model_state import Base, State
-    from sqlalchemy import create_engine
-    from sqlalchemy.orm import Session
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost/{}'
-                           .format(sys.argv[1], sys.argv[2],
-                                   sys.argv[3]), pool_pre_ping=True)
-    Base.metadata.create_all(engine)
+    st = session.query(State.id)\
+        .filter(func.binary(State.name) == av[4])\
+        .one_or_none()
 
-    session = Session(engine)
-    state = session.query(State).filter(State.name == sys.argv[4]).first()
-    if state:
-        print("{}".format(state.id))
+    if st:
+        print(st[0])
     else:
-        print("Not found")
-    session.close()
-
+        print('Not found')
