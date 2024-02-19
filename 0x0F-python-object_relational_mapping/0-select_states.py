@@ -1,19 +1,21 @@
 #!/usr/bin/python3
-"""list states from the database hbtn_0e_0_usa"""
+""" This script lists all states from database hbtn_0e_0_usa
 
-if __name__ == '__main__':
+Usage:
+    ./0-select_states.py <username> <password> <database>
+"""
 
+if __name__ == "__main__":
+    from sys import argv
     import MySQLdb
-    import sys
 
-    db = MySQLdb.connect(host='localhost', port=3306,
-                         user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
+    host_u, port_u = "localhost", 3306
+    name_u, password_u, database_u = argv[1:4]
 
-    cur = db.cursor()
-    cur.execute("SELECT * FROM states ORDER BY states.id ASC;")
-    rows = cur.fetchall()
-    for row in rows:
-          print(row)
-    cur.close()
-    db.close()
-
+    with MySQLdb.connect(host=host_u, port=port_u, user=name_u,
+                         password=password_u, database=database_u) as db:
+        with db.cursor() as cur:
+            cur.execute("SELECT * FROM states ORDER BY id ASC")
+            query_rows = cur.fetchall()
+            for row in query_rows:
+                print(row)
