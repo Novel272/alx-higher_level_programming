@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-""" This script lists all states from database hbtn_0e_0_usa
+""" This script list all of statw from database hbtn_0e_0_usa
 
-Usage:
-    ./0-select_states.py <username> <password> <database>
+Usage:'
+    ./0-select_states.py
 """
 
 if __name__ == "__main__":

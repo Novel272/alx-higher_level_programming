@@ -1,18 +1,20 @@
 #!/usr/bin/python3
 """Starts link class to the table database
 """
-import sys
 from model_state import Base, State
+from sys import argv as av
 from sqlalchemy import (create_engine)
 from sqlalchemy.orm import sessionmaker
 
-
 if __name__ == "__main__":
-    engine = create_engine('mysql+mysqldb://{}:{}@localhost:3306/{}'
-                           .format(sys.argv[1], sys.argv[2], sys.argv[3]))
-    Base.metadata.create_all(engine)
+    engine_info = 'mysql+mysqldb://{}:{}@localhost:{}/{}'.format(
+                   av[1], av[2], 3306, av[3])
+    engine = create_engine(engine_info, pool_pre_ping=True)
+    # Base.metadata.create_all(engine)
+
     Session = sessionmaker(bind=engine)
     session = Session()
-    for instance in session.query(State).order_by(State.id):
-        print(instance.id, instance.name, sep=": ")
 
+    states = session.query(State).all()
+    for st in states:
+        print(st)

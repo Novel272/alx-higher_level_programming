@@ -3,22 +3,22 @@
 list all cities of that state,
 using database hbtn_0e_4_usa"""
 
-if __name__ == '__main__':
-
+if __name__ == "__main__":
+    from sys import argv
     import MySQLdb
-    import sys
+    host_u, port_u = "localhost", 3306
+    name_u, password_u, database_u, state_name = argv[1:5]
 
-    db = MySQLdb.connect(host='localhost', port=3306,
-                         user=sys.argv[1], passwd=sys.argv[2], db=sys.argv[3])
-
-    cur = db.cursor()
-    cur.execute("SELECT cities.name\
-                FROM cities LEFT JOIN states\
-                ON states.id = cities.state_id\
-                WHERE states.name = %s\
-                ORDER BY cities.id ASC", (sys.argv[4],))
-    rows = cur.fetchall()
-    print(", ".join([row[0] for row in rows]))
-    cur.close()
-    db.close()
-
+    with MySQLdb.connect(host=host_u, port=port_u, user=name_u,
+                         password=password_u, database=database_u) as db:
+        with db.cursor() as cur:
+            cur.execute("\
+SELECT ct.name \
+FROM cities ct \
+LEFT JOIN states st \
+ON ct.state_id=st.id \
+WHERE st.name='{}' \
+ORDER BY ct.id ASC\
+".format(state_name))
+            query_rows = [row[0] for row in cur.fetchall()]
+            print(", ".join(query_rows))
